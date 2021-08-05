@@ -1,14 +1,16 @@
-const Gameboard = (() =>{
-    const main = document.querySelector('main')
-    const board = ['','','','','','','','',''];
-    const markSquare = function (e){
+const Gameboard = (() => {
+    const main = document.querySelector('main');
+    const board = ['', '', '', '', '', '', '', '', ''];
+    const markSquare = function (e) {
         console.log(e)
         let boardArray = document.querySelectorAll('div')
-        // e.target.innerText = current.marking
+        if (Controller.currentTurn == 'player1') {
+            e.target.innerText = Controller.player1.marking
+        }
     }
     const createBoxes = () => {
         let count = 0
-        board.forEach((box)=>{
+        board.forEach((box) => {
             let square = document.createElement('div');
             square.addEventListener('click', Gameboard.markSquare)
             square.textContent = `i${count}`;
@@ -18,10 +20,10 @@ const Gameboard = (() =>{
             Gameboard.board[count] = square
             main.appendChild(square)
             count++
-            
+
         })
     };
-    return{
+    return {
         board,
         markSquare,
         createBoxes,
@@ -29,16 +31,27 @@ const Gameboard = (() =>{
 })()
 
 
-const Player = (playerName, symbol)=>{
+const Player = (playerName, symbol) => {
     // const currentTurn = Play.turn
     const marking = symbol;
     const name = playerName;
-    return {name, marking}
+    return { name, marking }
 }
 
+const Controller = (() => {
+    const player1 = Player('jeff', 'O');
+    const player2 = Player('Gary', 'X');
+    const startGame = () => Gameboard.createBoxes()
+    const currentTurn = 'player1';
 
-const player1 = Player('jeff', 'O')
-const player2 = Player('Gary', 'X')
-Gameboard.createBoxes()
-console.log(Player.currentPlayer)
-console.log(Gameboard.board[1])
+    return {
+        currentTurn,
+        player1,
+        player2,
+        startGame
+    }
+})()
+
+
+Controller.startGame()
+console.log(Controller.player1.marking)
