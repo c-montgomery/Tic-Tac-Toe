@@ -6,6 +6,10 @@ const Gameboard = (() => {
         let boardArray = document.querySelectorAll('div')
         if (Controller.currentTurn == 'player1') {
             e.target.innerText = Controller.player1.marking
+            Controller.changeTurn()
+        }else{
+            e.target.innerText = Controller.player2.marking
+            Controller.changeTurn()
         }
     }
     const createBoxes = () => {
@@ -42,10 +46,18 @@ const Controller = (() => {
     const player1 = Player('jeff', 'O');
     const player2 = Player('Gary', 'X');
     const startGame = () => Gameboard.createBoxes()
-    const currentTurn = 'player1';
+    let currentTurn = 'player1';
+    const changeTurn = () => {
+        if(Controller.currentTurn =='player1'){
+            Controller.currentTurn = 'player2'
+        } else{
+            Controller.currentTurn = 'player1'
+        }
+    }
 
     return {
         currentTurn,
+        changeTurn,
         player1,
         player2,
         startGame
