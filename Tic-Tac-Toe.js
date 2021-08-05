@@ -17,7 +17,6 @@ const Gameboard = (() => {
         board.forEach((box) => {
             let square = document.createElement('div');
             square.addEventListener('click', Gameboard.markSquare)
-            square.textContent = `i${count}`;
             square.style.lineHeight = '200px'
             square.style.fontSize = '100px';
             square.index = count;
@@ -25,12 +24,40 @@ const Gameboard = (() => {
             main.appendChild(square)
             count++
 
-        })
+        }) 
     };
+    const isWinner = () =>{
+        if (Gameboard.board[0].innerText == Gameboard.board[1].innerText && Gameboard.board[2].innerText == Gameboard.board[1].innerText){
+            console.log('winner');
+            return Gameboard.board[0].innerText
+        }else if (Gameboard.board[3].innerText == Gameboard.board[4].innerText && Gameboard.board[4].innerText == Gameboard.board[5].innerText){
+            console.log('winner');
+            return Gameboard.board[3].innerText
+        }else if (Gameboard.board[6].innerText == Gameboard.board[7].innerText && Gameboard.board[7].innerText == Gameboard.board[8].innerText){
+            console.log('winner');
+            return Gameboard.board[6].innerText
+        }else if (Gameboard.board[2].innerText == Gameboard.board[5].innerText && Gameboard.board[5].innerText == Gameboard.board[8].innerText){
+            console.log('winner');
+            return Gameboard.board[2].innerText
+        }else if (Gameboard.board[1].innerText == Gameboard.board[4].innerText && Gameboard.board[4].innerText == Gameboard.board[7].innerText){
+            console.log('winner');
+            return Gameboard.board[1].innerText
+        }else if (Gameboard.board[0].innerText == Gameboard.board[3].innerText && Gameboard.board[3].innerText == Gameboard.board[6].innerText){
+            console.log('winner');
+            return Gameboard.board[0].innerText
+        }else if (Gameboard.board[0].innerText == Gameboard.board[4].innerText && Gameboard.board[4].innerText == Gameboard.board[8].innerText){
+            console.log('winner');
+            return Gameboard.board[0].innerText
+        }else if (Gameboard.board[6].innerText == Gameboard.board[4].innerText && Gameboard.board[4].innerText == Gameboard.board[2].innerText){
+            console.log('winner');
+            return Gameboard.board[6].innerText
+        }
+    }
     return {
         board,
         markSquare,
         createBoxes,
+        isWinner,
     }
 })()
 
@@ -66,4 +93,4 @@ const Controller = (() => {
 
 
 Controller.startGame()
-console.log(Controller.player1.marking)
+console.log( )
