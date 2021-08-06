@@ -3,6 +3,7 @@ const Gameboard = (() => {
     const body = document.querySelector('body')
     const main = document.querySelector('main');
     const board = ['', '', '', '', '', '', '', '', ''];
+
     const markSquare = function (e) {
         console.log(e)
         let boardArray = document.querySelectorAll('div')
@@ -19,12 +20,31 @@ const Gameboard = (() => {
             modal.className = 'modal'
             modal.innerText = 'FUCK'
             destroyBoxes();
+            displayWinner()
         }
     }
-    const destroyBoxes = () => {
-        // main.remove()
+
+    const displayWinner = () =>{
+        let winner = document.createElement('div')
+        winner.style.fontSize = '50px'
+        winner.textContent = 'Winner is '+ isWinner() +'!'
+        winner.style.width = '100%'
+
+        main.remove()
+        body.appendChild(winner)
     }
-    const inputNames = () => { }
+
+    const destroyBoxes = () => {
+        while (body.firstChild !==main){
+            body.removeChild(body.firstChild)
+        }
+        while (main.firstChild) {
+            main.removeChild(main.firstChild)
+        }
+        let sidebox = document.querySelector('div');
+        sidebox.remove()
+    }
+
     const createBoxes = () => {
         let count = 0
         board.forEach((box) => {
@@ -43,6 +63,7 @@ const Gameboard = (() => {
     };
 
     const getBody = () => body
+    const getMain = () => main
     const isWinner = () => {
         if (Gameboard.board[0].innerText == Gameboard.board[1].innerText && Gameboard.board[2].innerText == Gameboard.board[1].innerText) {
             return Gameboard.board[0].innerText
@@ -65,9 +86,11 @@ const Gameboard = (() => {
     return {
         board,
         getBody,
+        getMain,
         markSquare,
         createBoxes,
         isWinner,
+        destroyBoxes,
     }
 })()
 
@@ -83,28 +106,54 @@ const Controller = (() => {
     const player2 = Player('Gary', 'X');
     const gatherNames = () => {
         const body = Gameboard.getBody();
+
         const inputBox = document.createElement('div')
         inputBox.style.display = 'flex';
         inputBox.style.flexDirection = 'column'
+        inputBox.style.width = '30%'
+
         const buttonBox = document.createElement('div')
         buttonBox.style.display = 'flex';
         buttonBox.style.justifyContent = 'space-around'
-        const startButton = document.createElement('button')
-        const resetButton = document.createElement('button')
-        startButton.style.margin = '10px'
-        resetButton.style.margin = '10px'
+
+
         const label1 = document.createElement('p')
         const label2 = document.createElement('p')
 
         label1.textContent = 'Player 1'
         label2.textContent = 'Player 2'
-        startButton.textContent = 'Start'
-        resetButton.textContent = 'Reset'
 
         const player1Name = document.createElement('input');
         const player2Name = document.createElement('input');
         player1Name.placeholder = 'Name';
         player2Name.placeholder = 'Name';
+
+        const startButton = document.createElement('button')
+        startButton.textContent = 'Start'
+        startButton.style.margin = '10px'
+        startButton.addEventListener('click', () => {
+            if (player1Name.value !== '' && player2Name.value !== '') {
+                label1.textContent = player1Name.value + '\n vs. ' + player2Name.value;
+            } else {
+                console.log(label2.textContent)
+                label1.textContent = label1.textContent + ' vs. ' + label2.textContent
+            }
+            player1Name.remove()
+            player2Name.remove()
+            label2.remove()
+            startButton.remove()
+
+        })
+
+        const resetButton = document.createElement('button')
+        resetButton.textContent = 'Reset'
+        resetButton.style.margin = '10px'
+        resetButton.addEventListener('click', function () {
+            Gameboard.destroyBoxes();
+            startGame();
+        })
+
+
         body.appendChild(inputBox);
         inputBox.appendChild(player1Name);
         inputBox.appendChild(label1)
@@ -117,8 +166,9 @@ const Controller = (() => {
 
     }
     const startGame = () => {
-        gatherNames()
+        
         Gameboard.createBoxes();
+        gatherNames()
     }
     let currentTurn = 'player1';
     const changeTurn = () => {
