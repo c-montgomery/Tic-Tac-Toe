@@ -73,7 +73,6 @@ const Gameboard = (() => {
 
 
 const Player = (playerName, symbol) => {
-    // const currentTurn = Play.turn
     const marking = symbol;
     const name = playerName;
     return { name, marking }
@@ -87,12 +86,20 @@ const Controller = (() => {
         const inputBox = document.createElement('div')
         inputBox.style.display = 'flex';
         inputBox.style.flexDirection = 'column'
-
+        const buttonBox = document.createElement('div')
+        buttonBox.style.display = 'flex';
+        buttonBox.style.justifyContent = 'space-around'
+        const startButton = document.createElement('button')
+        const resetButton = document.createElement('button')
+        startButton.style.margin = '10px'
+        resetButton.style.margin = '10px'
         const label1 = document.createElement('p')
         const label2 = document.createElement('p')
 
         label1.textContent = 'Player 1'
         label2.textContent = 'Player 2'
+        startButton.textContent = 'Start'
+        resetButton.textContent = 'Reset'
 
         const player1Name = document.createElement('input');
         const player2Name = document.createElement('input');
@@ -102,7 +109,10 @@ const Controller = (() => {
         inputBox.appendChild(player1Name);
         inputBox.appendChild(label1)
         inputBox.appendChild(player2Name);
-        inputBox.appendChild(label2)
+        inputBox.appendChild(label2);
+        inputBox.appendChild(buttonBox);
+        buttonBox.appendChild(startButton)
+        buttonBox.appendChild(resetButton)
 
 
     }
