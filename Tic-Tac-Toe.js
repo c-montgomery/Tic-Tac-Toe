@@ -2,6 +2,8 @@ const Gameboard = (() => {
     const html = document.querySelector('html');
     const body = document.querySelector('body')
     const main = document.querySelector('main');
+    body.style.display = 'flex'
+    body.style.flexDirection = 'row'
     const board = ['', '', '', '', '', '', '', '', ''];
 
     const markSquare = function (e) {
@@ -24,29 +26,43 @@ const Gameboard = (() => {
         }
     }
 
-    const displayWinner = () =>{
+    const displayWinner = () => {
         let winner = document.createElement('div')
         winner.style.fontSize = '50px'
-        winner.textContent = 'Winner is '+ isWinner() +'!'
+        winner.textContent = 'Winner is ' + isWinner() + '!'
         winner.style.width = '100%'
 
         main.remove()
         body.appendChild(winner)
+        let playAgainButton = document.createElement('button')
+        body.appendChild(playAgainButton)
+        playAgainButton.textContent = 'Play again?'
+        playAgainButton.addEventListener('click', function(){
+            console.log('destroying boxes')
+            Gameboard.destroyBoxes();
+            let main = document.createElement('button')
+            console.log(main)
+            console.log('^^^^^^^^^^')
+            body.appendChild(main)
+            Controller.startGame();
+
+            playAgainButton.remove();
+        })
     }
 
     const destroyBoxes = () => {
-        while (body.firstChild !==main){
-            body.removeChild(body.firstChild)
-        }
+        
         while (main.firstChild) {
             main.removeChild(main.firstChild)
         }
         let sidebox = document.querySelector('div');
         sidebox.remove()
+        body.appendChild(main)
     }
 
     const createBoxes = () => {
         let count = 0
+        
         board.forEach((box) => {
             let square = document.createElement('div');
             square.addEventListener('click', Gameboard.markSquare)
@@ -64,6 +80,7 @@ const Gameboard = (() => {
 
     const getBody = () => body
     const getMain = () => main
+    
     const isWinner = () => {
         if (Gameboard.board[0].innerText == Gameboard.board[1].innerText && Gameboard.board[2].innerText == Gameboard.board[1].innerText) {
             return Gameboard.board[0].innerText
@@ -111,6 +128,7 @@ const Controller = (() => {
         inputBox.style.display = 'flex';
         inputBox.style.flexDirection = 'column'
         inputBox.style.width = '30%'
+        inputBox.style.display = 'inline-block'
 
         const buttonBox = document.createElement('div')
         buttonBox.style.display = 'flex';
@@ -153,8 +171,8 @@ const Controller = (() => {
             startGame();
         })
 
-
-        body.appendChild(inputBox);
+        let otherBody = Gameboard.getBody()
+        otherBody.appendChild(inputBox);
         inputBox.appendChild(player1Name);
         inputBox.appendChild(label1)
         inputBox.appendChild(player2Name);
@@ -166,10 +184,11 @@ const Controller = (() => {
 
     }
     const startGame = () => {
-        
+
         Gameboard.createBoxes();
         gatherNames()
     }
+    const getReset = () => resetButton
     let currentTurn = 'player1';
     const changeTurn = () => {
         if (Controller.currentTurn == 'player1') {
@@ -184,7 +203,8 @@ const Controller = (() => {
         changeTurn,
         player1,
         player2,
-        startGame
+        startGame,
+        getReset,
     }
 })()
 
