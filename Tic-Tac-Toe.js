@@ -1,51 +1,57 @@
 const Gameboard = (() => {
+    const isStarted = false;
     const html = document.querySelector('html');
-    const body = document.querySelector('body')
+    const body = document.querySelector('body');
     const main = document.querySelector('main');
-    body.style.display = 'flex'
-    body.style.flexDirection = 'row'
+    body.style.display = 'flex';
+    body.style.flexDirection = 'row';
     const board = ['', '', '', '', '', '', '', '', ''];
 
     const markSquare = function (e) {
-        console.log(e)
-        let boardArray = document.querySelectorAll('div')
-        if (Controller.currentTurn == 'player1') {
-            e.target.innerText = Controller.player1.marking
-            Controller.changeTurn()
-        } else {
-            e.target.innerText = Controller.player2.marking
-            Controller.changeTurn()
-        }
-        if (isWinner() == 'X' || isWinner() == 'O') {
-            console.log('theres a real winner')
-            let modal = document.createElement('div')
-            modal.className = 'modal'
-            modal.innerText = 'FUCK'
-            destroyBoxes();
-            displayWinner()
+        if (Gameboard.isStarted == true && e.target.innerText != 'O'&& e.target.innerText != 'X' ){
+            let boardArray = document.querySelectorAll('div')
+            if (Controller.currentTurn == 'player1') {
+                e.target.innerText = Controller.player1.marking
+                Controller.changeTurn()
+            } else {
+                e.target.innerText = Controller.player2.marking
+                Controller.changeTurn()
+            }
+            if (isWinner() == 'X' || isWinner() == 'O') {
+                console.log('theres a real winner')
+                let modal = document.createElement('div')
+                modal.className = 'modal'
+                modal.innerText = 'FUCK'
+                destroyBoxes();
+                displayWinner()
+            }
         }
     }
 
     const displayWinner = () => {
-        let winner = document.createElement('div')
-        winner.style.fontSize = '50px'
-        winner.textContent = 'Winner is ' + isWinner() + '!'
-        winner.style.width = '100%'
+        let winner = document.createElement('div');
+        winner.style.fontSize = '50px';
+        winner.textContent = 'Winner is ' + isWinner() + '!';
+        winner.style.width = '100%';
+        winner.style.display = 'block';
+        body.style.display = 'block'
 
-        main.remove()
-        body.appendChild(winner)
-        let playAgainButton = document.createElement('button')
-        body.appendChild(playAgainButton)
-        playAgainButton.textContent = 'Play again?'
+        main.remove();
+        body.appendChild(winner);
+        body.style.flexDirection = 'column';
+        body.style.textAlign = 'center';
+        let playAgainButton = document.createElement('button');
+        body.appendChild(playAgainButton);
+        playAgainButton.textContent = 'Play again?';
+        playAgainButton.style.marginTop = '10px'
         playAgainButton.addEventListener('click', function(){
             console.log('destroying boxes')
             Gameboard.destroyBoxes();
             let main = document.createElement('button')
-            console.log(main)
-            console.log('^^^^^^^^^^')
+            
             body.appendChild(main)
             Controller.startGame();
-
+            body.style.flexDirection = 'row'
             playAgainButton.remove();
         })
     }
@@ -77,7 +83,9 @@ const Gameboard = (() => {
         })
 
     };
-
+    const activateBoardBoxes = (bool) => {
+        Gameboard.isStarted = bool
+    }
     const getBody = () => body
     const getMain = () => main
     
@@ -108,6 +116,7 @@ const Gameboard = (() => {
         createBoxes,
         isWinner,
         destroyBoxes,
+        activateBoardBoxes,
     }
 })()
 
@@ -150,6 +159,7 @@ const Controller = (() => {
         startButton.textContent = 'Start'
         startButton.style.margin = '10px'
         startButton.addEventListener('click', () => {
+            Gameboard.activateBoardBoxes(true);
             if (player1Name.value !== '' && player2Name.value !== '') {
                 label1.textContent = player1Name.value + '\n vs. ' + player2Name.value;
             } else {
